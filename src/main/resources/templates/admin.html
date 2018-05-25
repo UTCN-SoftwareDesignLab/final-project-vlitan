@@ -14,7 +14,7 @@
             margin-top: 150px;
         }
         table, th, td {
-            border: 1px solid black;
+            border: 1px solid #020200;
             border-collapse: collapse;
         }
         th, td {
@@ -34,7 +34,7 @@
     <tr th:each="user : ${ userList }">
         <td></td>
         <td th:text="${ user.id }">Id</td>
-        <td th:text="${ user.username }">name</td>
+        <td th:text="${ user.email }">name</td>
         <td th:text="${ user.role }">role</td>
     </tr>
     </tbody>
@@ -48,9 +48,9 @@
             <td th:if="${#fields.hasErrors('id')}" th:errors="${user.id}">Id Error</td>
         </tr>
         <tr>
-            <td>Name:</td>
-            <td><input type="text" th:field="${user.username}" /></td>
-            <td th:if="${#fields.hasErrors('username')}" th:errors="${user.username}">Username Error</td>
+            <td>Email:</td>
+            <td><input type="text" th:field="${user.email}" /></td>
+            <td th:if="${#fields.hasErrors('email')}" th:errors="${user.email}">Email Error</td>
         </tr>
         <tr>
             <td>Password:</td>

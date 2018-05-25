@@ -28,40 +28,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Notification<Boolean> save(User user) {
-        Notification<Boolean> saveNotification = new Notification<>();
-        try {
-            userRepository.save(user);
-            saveNotification.setResult(Boolean.TRUE);
-        } catch (Exception e) {
-            saveNotification.addError("Something went bad while saving");
-            saveNotification.setResult(Boolean.FALSE);
-        }
-
-        return saveNotification;
+        return AbstractRepoAdapter.save(userRepository, user);
     }
 
     @Override
     public Notification<Boolean> delete(User user) {
-        return null;
+        return AbstractRepoAdapter.delete(userRepository, user);
     }
 
 
     @Override
     public Notification<Boolean> deleteById(Integer id) {
-        Notification<Boolean> deleteNotification = new Notification<>();
-        if (id.intValue() > 0) {
-            try {
-                userRepository.deleteById(id);
-                deleteNotification.setResult(Boolean.TRUE);
-            } catch (Exception e) {
-                deleteNotification.setResult(Boolean.FALSE);
-                deleteNotification.addError("Something went bad while deleting");
-            }
-        } else {
-            deleteNotification.setResult(Boolean.TRUE);
-            deleteNotification.addError("Id cannot be negative");
-        }
-        return deleteNotification;
+        return AbstractRepoAdapter.deleteById(userRepository, id);
     }
 }
 

@@ -46,4 +46,9 @@ public class User {
 
     @Column
     private boolean enabled;
+
+    public void insertSequence(Sequence sequence){
+        sequence.setUser(this);
+        sequences.add(sequence);
+    }
 }
