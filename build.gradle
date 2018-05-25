@@ -8,6 +8,7 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 
+
 buildscript {
     ext {
         springBootVersion = '1.5.2.RELEASE'
@@ -23,7 +24,9 @@ buildscript {
     dependencies {
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:' + springBootVersion
     }
+
 }
+
 
 jar {
     baseName = 'book-store'
@@ -44,7 +47,7 @@ dependencies {
     runtime 'mysql:mysql-connector-java:' + mySqlConnectorVersion
     compile('org.springframework.boot:spring-boot-starter-web')
     compile("org.springframework.boot:spring-boot-starter-websocket")
-
+    compileOnly "org.projectlombok:lombok:1.16.16"
     compile("org.webjars:webjars-locator")
     compile("org.webjars:sockjs-client:1.0.2")
     compile("org.webjars:stomp-websocket:2.3.3")
@@ -54,7 +57,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.6'
+    gradleVersion = '4.1'
 }
 
 

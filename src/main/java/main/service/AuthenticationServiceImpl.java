@@ -21,8 +21,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String plainPassword = user.getPassword();
         user.setPassword(AuthenticationServiceImpl.encodePassword(plainPassword));
         user.setEnabled(true);
-        if (userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword()).isPresent()){
-            registerNotification.addError("Already existing user with name " + user.getUsername() + " and same password");
+        if (userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword()).isPresent()){
+            registerNotification.addError("Already existing user with name " + user.getEmail() + " and same password");
             registerNotification.setResult(Boolean.FALSE);
         }
         else {

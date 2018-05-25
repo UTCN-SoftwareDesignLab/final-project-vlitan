@@ -11,13 +11,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static main.model.Role.DOCTOR;
-
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
-
 
     @Override
     public List<User> findAll() {
