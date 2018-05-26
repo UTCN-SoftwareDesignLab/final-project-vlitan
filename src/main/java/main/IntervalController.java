@@ -31,6 +31,7 @@ public class IntervalController {
         //model.addAttribute("message", request.getUserPrincipal().getName());
         model.addAttribute("interval", new Interval());
         session.setAttribute("sequenceId", id);
+        listIntervals(model, session);
         return "sequence";
     }
 
@@ -44,7 +45,7 @@ public class IntervalController {
                 Sequence sequence = sequenceOptional.get();
                 sequence.insertInterval(interval, Optional.empty());
                 sequenceService.save(sequence);
-                intervalService.save(interval);
+//                intervalService.save(interval);
             }
         }
         listIntervals(model, session);

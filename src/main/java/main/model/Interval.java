@@ -3,6 +3,7 @@ package main.model;
 import lombok.*;
 
 import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 import javax.persistence.*;
 
 @Getter
@@ -23,6 +24,7 @@ public class Interval {
     private String name;
 
     @Column
+    //@Nonnull
     @Nonnegative
     private Integer length;
 
