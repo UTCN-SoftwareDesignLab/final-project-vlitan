@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Sequence</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <style>
+        form {
+            margin-top: 150px;
+        }
+        table, th, td {
+            border: 1px solid #020200;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+        }
+    </style>
+
+</head>
+<body>
+
+<table>
+    <th>
+    <td>ID</td>
+    <td>Name</td>
+    <td>Length</td>
+
+    </th>
+    <tbody>
+    <tr th:each="interval : ${ intervalList }">
+        <td></td>
+        <td th:text="${ interval.id }">Id</td>
+        <td th:text="${ interval.name }">Name</td>
+        <td th:text="${ interval.length }">Length</td>
+    </tr>
+    </tbody>
+</table>
+
+<form th:action="@{/intervals}" th:object="${interval}" modelAttribute="interval" method="post" class="form-horizontal col-sm-6 col-sm-offset-3">
+    <table>
+        <tr>
+            <td>Id:</td>
+            <td><input type="number" th:field="${interval.id}" id="id"/></td>
+            <td th:if="${#fields.hasErrors('id')}" th:errors="${interval.id}">Id Error</td>
+        </tr>
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" th:field="${interval.name}" /></td>
+            <td th:if="${#fields.hasErrors('name')}" th:errors="${interval.name}">Name Error</td>
+        </tr>
+        <tr>
+            <td>Length:</td>
+            <td><input type="text" th:field="${interval.length}" /></td>
+            <td th:if="${#fields.hasErrors('length')}" th:errors="${interval.length}">Length Error</td>
+        </tr>
+
+        <!--<div class="form-group">-->
+            <!--<div class="col-sm-offset-4 col-sm-10">-->
+                <!--<button class="btn btn-primary" type="submit" name="action" value="list">List intervals</button>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-10">
+                <button class="btn btn-primary" type="submit" name="action" value="create">Create interval</button>
+            </div>
+        </div>
+
+    </table>
+</form>
+<h1>
+    <span th:text="'Status:' + ${message}"></span>
+</h1>
+</body>
+</html>

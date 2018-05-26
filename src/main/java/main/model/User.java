@@ -15,6 +15,7 @@ import java.util.Set;
 @Setter
 @ToString
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
@@ -24,7 +25,7 @@ public class User {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
-    @Column
+    @Column(unique = true)
     @NonNull
     @Pattern(regexp = "^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$", message = "Invalid email")
     private String email;

@@ -2,11 +2,13 @@ package main.model;
 
 import lombok.*;
 
+import javax.annotation.Nonnegative;
 import javax.persistence.*;
 
 @Getter
 @Setter
 @ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -19,6 +21,14 @@ public class Interval {
 
     @Column
     private String name;
+
+    @Column
+    @Nonnegative
+    private Integer length;
+
+//    @Column
+//    @Nonnegative
+//    private Integer index;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sequence_id", nullable = false)

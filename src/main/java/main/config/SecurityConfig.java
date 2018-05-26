@@ -40,10 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     antMatchers("/login/**").permitAll().
                     antMatchers("/favicon.ico").permitAll().
                     antMatchers("/admin/**").access("hasAuthority('ADMIN')").
-                    antMatchers("/secretary/**").access("hasAuthority('SECRETARY')").
-                    antMatchers("/secretaryConsultations/**").access("hasAuthority('SECRETARY')").
-                    antMatchers("/secretaryPatients/**").access("hasAuthority('SECRETARY')").
-                    antMatchers("/doctor/**").access("hasAuthority('DOCTOR')").
+                    antMatchers("/user/**").access("hasAuthority('USER')").
                 and().formLogin().
                     loginPage("/login").
                     successHandler(authAccessHandler()).

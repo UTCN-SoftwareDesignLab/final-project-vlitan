@@ -6,6 +6,7 @@ import main.util.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,5 +32,10 @@ public class IntervalServiceImpl implements IntervalService {
     @Override
     public Optional<Interval> findById(Integer id) {
         return AbstractRepoAdapter.findById(intervalRepository, id);
+    }
+
+    @Override
+    public List<Interval> findBySequenceId(Integer id) {
+        return intervalRepository.findAllBySequence_Id(id);
     }
 }

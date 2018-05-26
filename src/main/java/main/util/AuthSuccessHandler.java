@@ -15,16 +15,12 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
 
     private static final Map<Role, String> ROLE_TO_VIEW_MAP = ImmutableMap.of(
             Role.ADMIN, "/admin"
-//           ,Role.USER, "/user"
+           ,Role.USER, "/user"
     );
 
     @Override
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response){
         System.out.println("[AuthSuccessHandler] determine target for " + SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-          //  session.setAttribute("user", user);
-        }
         return ROLE_TO_VIEW_MAP.get(Role.valueOf(SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().replaceAll("[\\[\\]]", "")));
     }
 }

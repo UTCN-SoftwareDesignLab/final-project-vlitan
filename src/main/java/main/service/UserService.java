@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface UserService {
     Optional<User> findById(Integer id);
+    Optional<User> findByEmail(String email);
     List<User> findAll();
     Notification<Boolean> save(User user);
     Notification<Boolean> delete(User user);

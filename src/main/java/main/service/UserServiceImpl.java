@@ -27,6 +27,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
     public Notification<Boolean> save(User user) {
         return AbstractRepoAdapter.save(userRepository, user);
     }
@@ -35,7 +40,6 @@ public class UserServiceImpl implements UserService {
     public Notification<Boolean> delete(User user) {
         return AbstractRepoAdapter.delete(userRepository, user);
     }
-
 
     @Override
     public Notification<Boolean> deleteById(Integer id) {

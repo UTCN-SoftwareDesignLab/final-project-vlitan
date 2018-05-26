@@ -13,6 +13,7 @@ import java.util.Optional;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "sequences")
 public class Sequence {
@@ -34,9 +35,11 @@ public class Sequence {
     public void insertInterval(Interval interval, Optional<Integer> optIndex){
         interval.setSequence(this);
         if (optIndex.isPresent()){
+           // interval.setIndex(optIndex.get().intValue());
             intervals.add(optIndex.get().intValue(), interval);
         }
         else{
+           // interval.setIndex(intervals.size());
             intervals.add(interval);
         }
     }
