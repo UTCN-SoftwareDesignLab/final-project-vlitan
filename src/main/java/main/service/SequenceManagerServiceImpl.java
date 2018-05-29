@@ -4,10 +4,14 @@ import main.model.Interval;
 import main.model.Sequence;
 import main.util.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SequenceManagerServiceImpl implements SequenceManagerService, Observer {
@@ -26,10 +30,14 @@ public class SequenceManagerServiceImpl implements SequenceManagerService, Obser
 
     @Override
     public Notification<Boolean> start(Sequence sequence) {
+        if (sequenceRunner.getSequences().contains(sequence)){
+            sequenceRunner.getSequences().remove(sequence);
+        }
+        sequence.refresh();
         sequence.setEnabled(true);
         sequence.addObserver(this);
-        sequenceService.save(sequence);
         sequenceRunner.addSequence(sequence);
+        sequenceService.save(sequence);
         return new Notification<>(Boolean.TRUE);
     }
 
@@ -61,9 +69,20 @@ public class SequenceManagerServiceImpl implements SequenceManagerService, Obser
     }
 
     @Override
+    public Optional<Sequence> getActiveSequenceByUserId(Integer id) {
+        List<Sequence> sequences = sequenceRunner.getSequences();
+        sequences = sequences.stream().filter(s -> s.getUser().getId().equals(id)).collect(Collectors.toList());
+        if (sequences.isEmpty()){
+            return Optional.empty();
+        }
+        else{
+            return Optional.of(sequences.get(0));
+        }
+    }
+
+
     public void onSequenceUpdated(Sequence sequence) {
         sequenceService.save(sequence);
-        System.out.println("[SequenceManager] sequence " + sequence.getName() + " ticked");
         Interval interval = sequence.getIntervals().get(sequence.getCurrentIntervalIndex());
         System.out.println("[SequenceManager] sequence " + sequence.getName() + " at interval " + interval.getName());
     }

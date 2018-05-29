@@ -15,6 +15,7 @@ public abstract class SequenceRunner {
     abstract void resumeSequence(Sequence sequence);
     abstract void start();
     abstract void stop();
+    abstract List<Sequence> getSequences();
 
     public void setTickPeriod(int period){
         this.tickPeriod = period;

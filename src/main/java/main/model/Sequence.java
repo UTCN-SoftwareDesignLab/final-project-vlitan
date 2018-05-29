@@ -1,6 +1,7 @@
 package main.model;
 
 import lombok.*;
+import org.springframework.security.access.method.P;
 
 import javax.annotation.Nonnegative;
 import javax.persistence.*;
@@ -48,10 +49,16 @@ public class Sequence extends Observable {
         }
         else{
            // interval.setIndex(intervals.size());
-            intervals.add(interval);
+            this.getIntervals().add(interval);
         }
     }
 
+    public void refresh(){
+        for (Interval interval : intervals){
+            interval.refresh();
+        }
+        this.setCurrentIntervalIndex(0);
+    }
 
     public void iterateByAmount(Integer amount){
         Interval interval = this.getIntervals().get(this.getCurrentIntervalIndex());

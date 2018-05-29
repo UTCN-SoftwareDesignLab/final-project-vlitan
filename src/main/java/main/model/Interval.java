@@ -33,11 +33,18 @@ public class Interval {
     private int currentMoment;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sequence_id", nullable = false)
+    @JoinColumn(name = "sequence_id", nullable = true)
     private Sequence sequence;
 
     public boolean hasCompleted(){
         return this.getCurrentMoment() >= this.getLength();
     }
 
+    public int getTimeUntilFinished() {
+        return this.getLength() - this.getCurrentMoment();
+    }
+
+    public void refresh() {
+        this.setCurrentMoment(0);
+    }
 }

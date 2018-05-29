@@ -2,6 +2,7 @@ package main;
 
 import com.google.api.client.http.HttpRequest;
 import main.model.Sequence;
+import main.model.SequenceStatusDto;
 import main.model.User;
 import main.service.SequenceManagerService;
 import main.service.SequenceService;
@@ -10,6 +11,9 @@ import main.util.Notification;
 import org.codehaus.groovy.runtime.dgmimpl.arrays.IntegerArrayGetAtMetaMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -55,6 +59,7 @@ public class UserController {
     {
         model.addAttribute("sequenceList", sequenceService.findByUserEmail(request.getUserPrincipal().getName()));
         model.addAttribute("sequence", new Sequence());
+        model.addAttribute("message", request.getUserPrincipal().getName());
         return "user";
     }
 
@@ -77,7 +82,16 @@ public class UserController {
     @RequestMapping(value = "/sequences", method = RequestMethod.POST, params = "action=resume")
     public String resumeSequence(@RequestParam("id") Integer id, Model model, HttpServletRequest request)
     {
-        Optional<Sequence> sequenceOpt = sequenceService.findById(id);
+        Optional<Sequence> sequenceOpt = Optional.empty();
+        try{
+            sequenceOpt = sequenceService.findById(id);
+        }
+        catch (Exception e){
+
+        }
+        if (!sequenceOpt.isPresent()){
+            sequenceOpt = sequenceManagerService.getActiveSequenceByUserId(userService.findByEmail(request.getUserPrincipal().getName()).get().getId());
+        }
         if (sequenceOpt.isPresent()){
             Sequence sequence = sequenceOpt.get();
             if(sequence.getUser().getEmail().equals(request.getUserPrincipal().getName())){
@@ -93,16 +107,41 @@ public class UserController {
     @RequestMapping(value = "/sequences", method = RequestMethod.POST, params = "action=pause")
     public String pauseSequence(@RequestParam("id") Integer id, Model model, HttpServletRequest request)
     {
-        Optional<Sequence> sequenceOpt = sequenceService.findById(id);
-        if (sequenceOpt.isPresent()){
+        Optional<Sequence> sequenceOpt = Optional.empty();
+        try{
+            sequenceOpt = sequenceService.findById(id);
+        }
+        catch (Exception e){
+
+        }
+        if (!sequenceOpt.isPresent()){
+            sequenceOpt = sequenceManagerService.getActiveSequenceByUserId(userService.findByEmail(request.getUserPrincipal().getName()).get().getId());
+        }
+        if (sequenceOpt.isPresent()) {
             Sequence sequence = sequenceOpt.get();
-            if(sequence.getUser().getEmail().equals(request.getUserPrincipal().getName())){
+            if (sequence.getUser().getEmail().equals(request.getUserPrincipal().getName())) {
                 sequenceManagerService.pause(sequence);
-            }
-            else{
+            } else {
                 System.out.println("[UserController] ERROR - the sequence does not belong to the logged user");
             }
         }
         return listSequences(model, request);
+    }
+
+    @MessageMapping("/userEndpoint")
+    @SendTo("/topic/update")
+    public SequenceStatusDto gotNotified(SimpMessageHeaderAccessor headerAccessor) {
+//        System.out.println("got called");
+        String username = headerAccessor.getUser().getName();
+        Integer userId = userService.findByEmail(username).get().getId();
+        Optional<Sequence> sequenceOptional = sequenceManagerService.getActiveSequenceByUserId(userId);
+        SequenceStatusDto sequenceStatusDto = SequenceStatusDto.builder().name("empty").currentInterval("empty").timeLeft(1).build();
+        if (sequenceOptional.isPresent()){
+            sequenceStatusDto.setUsername(username);
+            sequenceStatusDto.setTimeLeft(sequenceOptional.get().getIntervals().get(sequenceOptional.get().getCurrentIntervalIndex()).getTimeUntilFinished());
+            sequenceStatusDto.setName(sequenceOptional.get().getName());
+            sequenceStatusDto.setCurrentInterval(sequenceOptional.get().getIntervals().get(sequenceOptional.get().getCurrentIntervalIndex()).getName());
+        }
+        return sequenceStatusDto;
     }
 }

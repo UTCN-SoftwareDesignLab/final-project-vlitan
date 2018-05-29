@@ -44,8 +44,8 @@ public class IntervalController {
             if (sequenceOptional.isPresent()) {
                 Sequence sequence = sequenceOptional.get();
                 sequence.insertInterval(interval, Optional.empty());
+                intervalService.save(interval);
                 sequenceService.save(sequence);
-//                intervalService.save(interval);
             }
         }
         listIntervals(model, session);

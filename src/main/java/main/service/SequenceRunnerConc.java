@@ -67,4 +67,9 @@ public class SequenceRunnerConc extends SequenceRunner {
     void stop() {
         //TODO
     }
+
+    @Override
+    List<Sequence> getSequences() {
+        return this.sequences;
+    }
 }

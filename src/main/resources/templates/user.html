@@ -5,10 +5,16 @@
 <head>
     <meta charset="UTF-8"/>
     <title>User</title>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
+    <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="js/requester.js"></script>
     <style>
         form {
             margin-top: 150px;
@@ -23,7 +29,7 @@
     </style>
 
 </head>
-<body>
+<body onload="connect()">
 
 <table>
     <th>
@@ -87,14 +93,9 @@
 
     </table>
 </form>
-<h2>
-    <span th:text="'Current Sequence:' + ${currentSequence}"></span>
-</h2>
-<h2>
-    <span th:text="'Current Interval:' + ${currentInteval}"></span>
-</h2>
-<h2>
-    <span th:text="'Time left until next interval:' + ${leftUntilNext}"></span>
-</h2>
+<p id = "currentSequenceName"></p>
+<p id = "currentIntervalName"></p>
+<p id = "leftUntilNext"></p>
+<span id = "loggedUser" th:text="${message}"></span>
 </body>
 </html>
