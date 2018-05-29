@@ -5,10 +5,10 @@ import lombok.*;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.persistence.*;
+import java.util.Observable;
 
 @Getter
 @Setter
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,13 +26,18 @@ public class Interval {
     @Column
     //@Nonnull
     @Nonnegative
-    private Integer length;
+    private int length;
 
-//    @Column
-//    @Nonnegative
-//    private Integer index;
+    @Column
+    @Nonnegative
+    private int currentMoment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sequence_id", nullable = false)
     private Sequence sequence;
+
+    public boolean hasCompleted(){
+        return this.getCurrentMoment() >= this.getLength();
+    }
+
 }

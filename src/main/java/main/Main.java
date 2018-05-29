@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableAutoConfiguration
 @EnableJpaRepositories(basePackages = {"main.repository"})
 @PropertySource(value = "classpath:application.properties")
-public class Main {
+public class Main {//TODO add cache decorator
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }

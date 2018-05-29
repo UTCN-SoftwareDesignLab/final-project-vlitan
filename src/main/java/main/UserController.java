@@ -3,6 +3,7 @@ package main;
 import com.google.api.client.http.HttpRequest;
 import main.model.Sequence;
 import main.model.User;
+import main.service.SequenceManagerService;
 import main.service.SequenceService;
 import main.service.UserService;
 import main.util.Notification;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -28,6 +31,8 @@ public class UserController {
     private SequenceService sequenceService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private SequenceManagerService sequenceManagerService;
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     @Order(value = 1)
@@ -51,5 +56,53 @@ public class UserController {
         model.addAttribute("sequenceList", sequenceService.findByUserEmail(request.getUserPrincipal().getName()));
         model.addAttribute("sequence", new Sequence());
         return "user";
+    }
+
+    @RequestMapping(value = "/sequences", method = RequestMethod.POST, params = "action=start")
+    public String startSequence(@RequestParam("id") Integer id, Model model, HttpServletRequest request)
+    {
+        Optional<Sequence> sequenceOpt = sequenceService.findById(id);
+        if (sequenceOpt.isPresent()){
+            Sequence sequence = sequenceOpt.get();
+            if(sequence.getUser().getEmail().equals(request.getUserPrincipal().getName())){
+                sequenceManagerService.start(sequence);
+            }
+            else{
+                System.out.println("[UserController] ERROR - the sequence does not belong to the logged user");
+            }
+        }
+        return listSequences(model, request);
+    }
+
+    @RequestMapping(value = "/sequences", method = RequestMethod.POST, params = "action=resume")
+    public String resumeSequence(@RequestParam("id") Integer id, Model model, HttpServletRequest request)
+    {
+        Optional<Sequence> sequenceOpt = sequenceService.findById(id);
+        if (sequenceOpt.isPresent()){
+            Sequence sequence = sequenceOpt.get();
+            if(sequence.getUser().getEmail().equals(request.getUserPrincipal().getName())){
+                sequenceManagerService.resume(sequence);
+            }
+            else{
+                System.out.println("[UserController] ERROR - the sequence does not belong to the logged user");
+            }
+        }
+        return listSequences(model, request);
+    }
+
+    @RequestMapping(value = "/sequences", method = RequestMethod.POST, params = "action=pause")
+    public String pauseSequence(@RequestParam("id") Integer id, Model model, HttpServletRequest request)
+    {
+        Optional<Sequence> sequenceOpt = sequenceService.findById(id);
+        if (sequenceOpt.isPresent()){
+            Sequence sequence = sequenceOpt.get();
+            if(sequence.getUser().getEmail().equals(request.getUserPrincipal().getName())){
+                sequenceManagerService.pause(sequence);
+            }
+            else{
+                System.out.println("[UserController] ERROR - the sequence does not belong to the logged user");
+            }
+        }
+        return listSequences(model, request);
     }
 }

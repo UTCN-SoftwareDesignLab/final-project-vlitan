@@ -13,4 +13,5 @@ public interface SequenceService {
     Notification<Boolean> deleteById(Integer id);
     Optional<Sequence> findById(Integer id);
     List<Sequence> findByUserEmail(String email);
+    Optional<Sequence> getActiveSequenceByUserId(Integer userId);
 }

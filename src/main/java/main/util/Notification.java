@@ -13,6 +13,11 @@ public class Notification<T> {
         this.errors = new ArrayList<>();
     }
 
+    public Notification(T result){
+        this();
+        this.result = result;
+    }
+
     public void addError(String message) {
         errors.add(message);
     }

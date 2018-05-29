@@ -39,4 +39,9 @@ public class SequenceServiceImpl implements SequenceService {
     public List<Sequence> findByUserEmail(String email) {
         return sequenceRepository.findAllByUserEmail(email);
     }
+
+    @Override
+    public Optional<Sequence> getActiveSequenceByUserId(Integer userId) {
+        return sequenceRepository.findByUserIdAndEnabled(userId, true);
+    }
 }
